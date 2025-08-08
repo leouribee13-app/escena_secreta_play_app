@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escena Secreta Play</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #000;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      color: #e50914;
+    }
+    section {
+      padding: 20px;
+    }
+    .video-container {
+      margin-bottom: 30px;
+    }
+    iframe {
+      width: 100%;
+      height: 360px;
+      border: none;
+    }
+    .news {
+      background-color: #222;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    a {
+      color: #e50914;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Escena Secreta Play</h1>
+    <p>Ver películas online y noticias de cine</p>
+  </header>
+
+  <section>
+    <h2>🎬 Ver Películas Online</h2>
+    <div class="video-container">
+      <iframe src="https://drive.google.com/file/d/1Maioe4e-pQ3UV7b1Qe2jeT0iWSVtb34X/preview" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <section>
+    <h2>📰 Noticias de Cine</h2>
+    <div id="news-container" class="news">
+      Cargando noticias...
+    </div>
+  </section>
+
+  <script>
+    async function loadNews() {
+      const rssUrl = 'https://www.sensacine.com/feeds/news.xml';
+      const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        const container = document.getElementById('news-container');
+        container.innerHTML = "";
+        data.items.slice(0, 5).forEach(item => {
+          const article = document.createElement('div');
+          article.innerHTML = `<h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
+            <p>${item.pubDate}</p><p>${item.description}</p>`;
+          container.appendChild(article);
+        });
+      } catch (error) {
+        document.getElementById('news-container').innerText = "No se pudieron cargar las noticias.";
+      }
+    }
+
+    loadNews();
+  </script>
+</body>
+</html>
